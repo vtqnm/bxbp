@@ -1,0 +1,26 @@
+{
+  "name": "vtqnm/bxbp-cli",
+  "description": "CLI tool for Bitrix module boilerplate",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "vtqnm",
+      "email": "vtqnm0@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^8.1",
+    "symfony/console": "^6.4",
+    "laravel/prompts": "^0.3.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vtqnm\\BxbpCli\\": "src/"
+    }
+  },
+  "bin": [
+    "bin/bxbp"
+  ],
+  "keywords": ["cli", "bitrix", "module", "boilerplate", "tool"]
+}
