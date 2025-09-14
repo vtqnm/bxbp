@@ -2,7 +2,9 @@
 
 namespace Vtqnm\BxbpCli\Generator;
 
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
 use Vtqnm\BxbpCli\Config\ModuleConfig;
 use Vtqnm\BxbpCli\Filesystem\Directory;
 use Vtqnm\BxbpCli\Filesystem\TempDirectoryFactory;
@@ -10,6 +12,7 @@ use Vtqnm\BxbpCli\Filesystem\TempDirectoryFactory;
 class ModuleGenerator
 {
     protected string $templatePath;
+    protected string $languageCode;
     protected array $replacements;
 
     protected Filesystem $filesystem;
@@ -17,10 +20,12 @@ class ModuleGenerator
 
     public function __construct(
         string $templatePath,
+        string $languageCode,
         $replacements
     )
     {
         $this->templatePath = $templatePath;
+        $this->languageCode = $languageCode;
 
         if (is_array($replacements)) {
             $this->replacements = $replacements;
@@ -34,6 +39,17 @@ class ModuleGenerator
         $this->tempDirectoryFactory = new TempDirectoryFactory();
     }
 
+    public static function fromConfig(
+        string $templatePath,
+        ModuleConfig $moduleConfig
+    ): self {
+        return new self(
+            $templatePath,
+            $moduleConfig->getLanguageCode(),
+            $moduleConfig
+        );
+    }
+
     public function generate(): Directory
     {
         $directory = $this->tempDirectoryFactory->create();
@@ -44,6 +60,8 @@ class ModuleGenerator
         );
 
         $this->replacePlaceholders($directory->getPath());
+        $this->changeLangFolderCode($directory->getPath(), $this->languageCode);
+
         return $directory;
     }
 
@@ -69,5 +87,41 @@ class ModuleGenerator
                 )
             );
         }
+    }
+
+    private function changeLangFolderCode(string $workPath, string $languageCode): void
+    {
+        if ($this->filesystem->exists($workPath . '/lang/' . $languageCode)) {
+            return;
+        }
+
+        $templateLangFolderCode = $this->getTemplateLangFolderCode($workPath);
+        
+        $this->filesystem->rename(
+            $workPath . '/install/lang/' . $templateLangFolderCode,
+            $workPath . '/install/lang/' . $languageCode
+        );
+    }
+
+    private function getTemplateLangFolderCode(string $workPath): string
+    {
+        $langPath = $workPath . '/install/lang/';
+        
+        if (!$this->filesystem->exists($langPath)) {
+            throw new RuntimeException('Language directory does not exist: ' . $langPath);
+        }
+
+        $finder = new Finder();
+        $directories = $finder->directories()->in($langPath)->depth(0);
+
+        if ($directories->count() === 0) {
+            throw new RuntimeException('No language directories found in: ' . $langPath);
+        }
+
+        foreach ($directories as $directory) {
+            return $directory->getFilename();
+        }
+
+        throw new RuntimeException('No language directories found in: ' . $langPath);
     }
 }
