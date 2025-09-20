@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Validator\Constraints\LanguageCode;
+use Vtqnm\Bxbp\Validator\Constraints\LanguageCode;
 
 beforeEach(function () {
     $this->constraint = new LanguageCode();

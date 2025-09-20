@@ -1,6 +1,6 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Validator\Constraints;
+namespace Vtqnm\Bxbp\Validator\Constraints;
 
 class ModuleVersionDate extends Constraint
 {

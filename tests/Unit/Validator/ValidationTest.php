@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Validator\Validation;
-use Vtqnm\BxbpCli\Validator\Validator;
+use Vtqnm\Bxbp\Validator\Validation;
+use Vtqnm\Bxbp\Validator\Validator;
 
 it('creates validator instance', function () {
     $validator = Validation::createValidator();

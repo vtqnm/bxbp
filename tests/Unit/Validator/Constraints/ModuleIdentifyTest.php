@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Validator\Constraints\ModuleIdentify;
+use Vtqnm\Bxbp\Validator\Constraints\ModuleIdentify;
 
 beforeEach(function () {
     $this->constraint = new ModuleIdentify();

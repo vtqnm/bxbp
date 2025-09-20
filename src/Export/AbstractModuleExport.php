@@ -1,6 +1,6 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Export;
+namespace Vtqnm\Bxbp\Export;
 
 use Symfony\Component\Filesystem\Filesystem;
 

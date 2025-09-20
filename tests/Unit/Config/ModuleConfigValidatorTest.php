@@ -1,7 +1,7 @@
 <?php
 
-use Vtqnm\BxbpCli\Config\ModuleConfigValidator;
-use Vtqnm\BxbpCli\Exceptions\ModuleValidationException;
+use Vtqnm\Bxbp\Config\ModuleConfigValidator;
+use Vtqnm\Bxbp\Exceptions\ModuleValidationException;
 
 beforeEach(function () {
     $this->validator = new ModuleConfigValidator();

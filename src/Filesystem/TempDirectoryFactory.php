@@ -1,6 +1,6 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Filesystem;
+namespace Vtqnm\Bxbp\Filesystem;
 
 use Symfony\Component\Filesystem\Filesystem;
 

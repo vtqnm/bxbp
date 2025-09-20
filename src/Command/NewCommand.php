@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Vtqnm\BxbpCli\Command;
+namespace Vtqnm\Bxbp\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Vtqnm\BxbpCli\Validator\Validation;
-use Vtqnm\BxbpCli\Validator\Validator;
-use Vtqnm\BxbpCli\Validator\Constraints;
-use Vtqnm\BxbpCli\Config\ModuleConfig;
-use Vtqnm\BxbpCli\Generator\ModuleGenerator;
-use Vtqnm\BxbpCli\Export\ModuleExporter;
-use Vtqnm\BxbpCli\Export\Strategy\RawModuleExport;
+use Vtqnm\Bxbp\Validator\Validation;
+use Vtqnm\Bxbp\Validator\Validator;
+use Vtqnm\Bxbp\Validator\Constraints;
+use Vtqnm\Bxbp\Config\ModuleConfig;
+use Vtqnm\Bxbp\Generator\ModuleGenerator;
+use Vtqnm\Bxbp\Export\ModuleExporter;
+use Vtqnm\Bxbp\Export\Strategy\RawModuleExport;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Validator\Constraints\ModuleVersion;
+use Vtqnm\Bxbp\Validator\Constraints\ModuleVersion;
 
 beforeEach(function () {
     $this->constraint = new ModuleVersion();

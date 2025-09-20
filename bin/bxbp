@@ -8,5 +8,5 @@ $root = dirname(__DIR__);
 require $root . '/vendor/autoload.php';
 
 $application = new \Symfony\Component\Console\Application('BXBP CLI', '0.0.1');
-$application->add(new \Vtqnm\BxbpCli\Command\NewCommand());
+$application->add(new \Vtqnm\Bxbp\Command\NewCommand());
 $application->run();

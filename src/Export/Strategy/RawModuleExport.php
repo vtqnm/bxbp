@@ -1,9 +1,9 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Export\Strategy;
+namespace Vtqnm\Bxbp\Export\Strategy;
 
-use Vtqnm\BxbpCli\Export\AbstractModuleExport;
-use Vtqnm\BxbpCli\Filesystem\Directory;
+use Vtqnm\Bxbp\Export\AbstractModuleExport;
+use Vtqnm\Bxbp\Filesystem\Directory;
 
 class RawModuleExport extends AbstractModuleExport
 {

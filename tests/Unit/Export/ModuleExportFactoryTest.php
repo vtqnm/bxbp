@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Exceptions\InvalidModuleExportException;
-use Vtqnm\BxbpCli\Export\ModuleExportFactory;
-use Vtqnm\BxbpCli\Export\Strategy\RawModuleExport;
+use Vtqnm\Bxbp\Exceptions\InvalidModuleExportException;
+use Vtqnm\Bxbp\Export\ModuleExportFactory;
+use Vtqnm\Bxbp\Export\Strategy\RawModuleExport;
 
 it('creates raw export strategy', function () {
     $exportStrategy = ModuleExportFactory::create('raw');
