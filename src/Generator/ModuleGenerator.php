@@ -96,6 +96,9 @@ class ModuleGenerator
         }
 
         $templateLangFolderCode = $this->getTemplateLangFolderCode($workPath);
+        if ($templateLangFolderCode === $languageCode) {
+            return;
+        }
         
         $this->filesystem->rename(
             $workPath . '/install/lang/' . $templateLangFolderCode,

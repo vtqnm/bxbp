@@ -8,10 +8,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Vtqnm\BxbpCli\Validator\Constraints\ModuleIdentify;
-use Vtqnm\BxbpCli\Validator\Constraints\ModuleVersion;
-use Vtqnm\BxbpCli\Validator\Constraints\ModuleVersionDate;
 use Vtqnm\BxbpCli\Validator\Validation;
+use Vtqnm\BxbpCli\Validator\Validator;
+use Vtqnm\BxbpCli\Validator\Constraints;
+use Vtqnm\BxbpCli\Config\ModuleConfig;
+use Vtqnm\BxbpCli\Generator\ModuleGenerator;
+use Vtqnm\BxbpCli\Export\ModuleExporter;
+use Vtqnm\BxbpCli\Export\Strategy\RawModuleExport;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
@@ -19,6 +22,14 @@ use function Laravel\Prompts\text;
 
 class NewCommand extends Command
 {
+    private Validator $validator;
+
+    public function __construct(?string $name = null)
+    {
+        parent::__construct($name);
+        $this->validator = Validation::createValidator();
+    }
+
     protected function configure(): void
     {
         $this
@@ -54,9 +65,41 @@ class NewCommand extends Command
         $this->askVersionDateIfNotFilled($input);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        parent::execute($input, $output);
+        try {
+            $moduleConfig = new ModuleConfig(
+                $input->getArgument('id'),
+                $input->getArgument('name'),
+                $input->getArgument('description'),
+                $input->getArgument('partner'),
+                $input->getArgument('partner_url'),
+                $input->getArgument('version'),
+                $input->getArgument('version_date'),
+                'ru'
+            );
+
+            $generator = ModuleGenerator::fromConfig(
+                dirname(__DIR__, 2) . '/stubs/module',
+                $moduleConfig
+            );
+
+            $generatedDirectory = $generator->generate();
+
+            $moduleExporter = new ModuleExporter(
+                new RawModuleExport()
+            );
+
+            $destinationPath = getcwd() . DIRECTORY_SEPARATOR . $moduleConfig->getModuleId();
+            $moduleExporter->export($generatedDirectory, $destinationPath);
+
+            info("<fg=green>Module '{$moduleConfig->getModuleId()}' successfully created at path: {$destinationPath}</>");
+
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            error("Error creating module: " . $e->getMessage());
+            return Command::FAILURE;
+        }
     }
 
     protected function writeLogo(OutputInterface $output): void
@@ -76,134 +119,167 @@ class NewCommand extends Command
 
     protected function askModuleIdIfNotFilled(InputInterface $input): void
     {
-        $validator = Validation::createValidator();
-        $constraint = new ModuleIdentify();
+        $constraint = new Constraints\ModuleIdentify();
 
-        $isValid = true;
-        if (!empty($input->getArgument('id')) && !$validator->validate($input->getArgument('id'), $constraint)) {
-            $isValid = false;
+        $moduleId = $input->getArgument('id');
+
+        if (!empty($moduleId) && $this->validator->validate($moduleId, $constraint)) {
+            return;
         }
 
-        if (!empty($validator->getErrors())) {
-            info('<fg=yellow>' . implode(PHP_EOL, $validator->getErrors()) . '</>');
-            $validator->flushErrors();
+        if (!empty($moduleId)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        if (!$isValid) {
-            $input->setArgument('id', text(
-                'Enter the module ID',
-                'vendor.module',
-                required: true,
-                validate: fn($value) => $validator->validate($value, $constraint)
-                    ? null
-                    : implode(PHP_EOL, $validator->getErrors())
-            ));
-        }
+        $input->setArgument('id', text(
+            'Enter the module ID',
+            'vendor.module',
+            required: true,
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
+        ));
     }
 
     protected function askModuleNameIfNotFilled(InputInterface $input): void
     {
-        if ($input->hasArgument('name') && !is_null($input->getArgument('name'))) {
+        $constraint = new Constraints\ModuleName();
+
+        $moduleName = $input->getArgument('name');
+        if (!empty($moduleName) && $this->validator->validate($moduleName, $constraint)) {
             return;
+        }
+
+        if (!empty($moduleName)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
         $input->setArgument('name', text(
             'Enter the module name',
-            'Module name <fg=blue>(optional)</>'
+            'Module name <fg=blue>(optional)</>',
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
         ));
     }
 
     protected function askModuleDescriptionIfNotFilled(InputInterface $input): void
     {
-        if ($input->hasArgument('description') && !is_null($input->getArgument('description'))) {
+        $constraint = new Constraints\ModuleDescription();
+
+        $moduleDescription = $input->getArgument('description');
+        if (!empty($moduleDescription) && $this->validator->validate($moduleDescription, $constraint)) {
             return;
+        }
+
+        if (!empty($moduleDescription)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
         $input->setArgument('description', text(
             'Enter the module description',
-            'Module description <fg=blue>(optional)</>'
+            'Module description <fg=blue>(optional)</>',
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
         ));
     }
 
     protected function askPartnerNameIfNotFilled(InputInterface $input): void
     {
-        if ($input->hasArgument('partner') && !is_null($input->getArgument('partner'))) {
+        $constraint = new Constraints\PartnerName();
+
+        $partnerName = $input->getArgument('partner');
+        if (!empty($partnerName) && $this->validator->validate($partnerName, $constraint)) {
             return;
+        }
+
+        if (!empty($partnerName)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
         $input->setArgument('partner', text(
             'Enter the partner name',
-            'Partner name <fg=blue>(optional)</>'
+            'Partner name <fg=blue>(optional)</>',
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
         ));
     }
 
     protected function askPartnerUrlIfNotFilled(InputInterface $input): void
     {
-        if (
-            empty($input->getArgument('partner')) ||
-            ($input->hasArgument('partner_url') && !is_null($input->getArgument('partner_url')))
-        ) {
+        $constraint = new Constraints\PartnerUri();
+
+        $partnerUrl = $input->getArgument('partner_url');
+        if (!empty($partnerUrl) && $this->validator->validate($partnerUrl, $constraint)) {
             return;
+        }
+
+        if (!empty($partnerUrl)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
         $input->setArgument('partner_url', text(
             'Enter the partner url',
-            'https://example.com <fg=blue>(optional)</>'
+            'https://example.com <fg=blue>(optional)</>',
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
         ));
     }
 
     protected function askVersionIfNotFilled(InputInterface $input): void
     {
-        $validator = Validation::createValidator();
-        $constraint = new ModuleVersion();
+        $constraint = new Constraints\ModuleVersion();
 
-        $isValid = true;
-        if (empty($input->getArgument('version')) || !$validator->validate($input->getArgument('version'), $constraint)) {
-            $isValid = false;
+        $version = $input->getArgument('version');
+        if (!empty($version) && $this->validator->validate($version, $constraint)) {
+            return;
         }
 
-        if (!empty($validator->getErrors())) {
-            info('<fg=yellow>' . implode(PHP_EOL, $validator->getErrors()) . '</>');
+        if (!empty($version)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        if (!$isValid) {
-            $input->setArgument('version', text(
-                'Enter the version',
-                '1.0.0',
-                '1.0.0',
-                validate: fn($value) => $validator->validate($value, $constraint)
-                    ? null
-                    : implode(PHP_EOL, $validator->getErrors())
-            ));
-        }
+        $input->setArgument('version', text(
+            'Enter the version',
+            '1.0.0',
+            '1.0.0',
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
+        ));
     }
 
     protected function askVersionDateIfNotFilled(InputInterface $input): void
     {
-        $validator = Validation::createValidator();
-        $constraint = new ModuleVersionDate();
+        $constraint = new Constraints\ModuleVersionDate();
 
-        $isValid = true;
-        if (empty($input->getArgument('version_date')) || !$validator->validate($input->getArgument('version_date'), $constraint)) {
-            $isValid = false;
+        $versionDate = $input->getArgument('version_date');
+        if (!empty($versionDate) && $this->validator->validate($versionDate, $constraint)) {
+            return;
         }
 
-        if (!empty($validator->getErrors())) {
-            info('<fg=yellow>' . implode(PHP_EOL, $validator->getErrors()) . '</>');
+        if (!empty($versionDate)) {
+            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        if (!$isValid) {
-            $now = time();
-            $dateFormat = 'Y-m-d H:i:s';
+        $now = time();
+        $dateFormat = 'Y-m-d H:i:s';
 
-            $input->setArgument('version_date', text(
-                'Enter the version date',
-                date($dateFormat, $now),
-                date($dateFormat, $now),
-                validate: fn($value) => $validator->validate($value, $constraint)
-                    ? null
-                    : implode(PHP_EOL, $validator->getErrors())
-            ));
-        }
+        $input->setArgument('version_date', text(
+            'Enter the version date',
+            date($dateFormat, $now),
+            date($dateFormat, $now),
+            validate: fn($value) => $this->validator->validate($value, $constraint)
+                ? null
+                : $this->formatValidationErrors($this->validator->getErrors())
+        ));
+    }
+
+    private function formatValidationErrors(array $errors): string
+    {
+        return implode(PHP_EOL, $errors);
     }
 }

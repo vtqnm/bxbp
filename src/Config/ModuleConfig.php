@@ -46,6 +46,11 @@ class ModuleConfig
         $this->languageCode = $languageCode;
     }
 
+    public function getModuleId(): string
+    {
+        return $this->moduleId;
+    }
+
     public function getLanguageCode(): string
     {
         return $this->languageCode;

@@ -107,5 +107,5 @@ it('handles non-string values by casting to string', function () {
     $result = $this->constraint->validate(123);
 
     expect($result)->toBeFalse();
-    expect($this->constraint->getError())->toContain('Module ID must be in format <partner_name>.<module_name>');
+    expect($this->constraint->getError())->toContain('Module ID must not start with a digit');
 });

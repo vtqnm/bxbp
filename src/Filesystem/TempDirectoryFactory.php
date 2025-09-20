@@ -17,7 +17,7 @@ class TempDirectoryFactory
 
     public function create(): Directory
     {
-        $tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('module_');
+        $tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . uniqid('bxbp_module_');
 
         $this->filesystem->mkdir($tempDir);
         TempDirectoryCleaner::register($tempDir);

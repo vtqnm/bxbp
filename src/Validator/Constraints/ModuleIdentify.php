@@ -15,13 +15,8 @@ class ModuleIdentify extends Constraint
             return false;
         }
 
-        if (!preg_match('/^[^.]+\.[^.]+$/', $moduleId)) {
-            $this->error('Module ID must be in format <partner_name>.<module_name>');
-            return false;
-        }
-
-        if (!preg_match('/^[a-z0-9.]+$/', $moduleId)) {
-            $this->error('Module ID must contain only lowercase letters and numbers');
+        if (mb_strlen($moduleId) > 50) {
+            $this->error('Module ID must not exceed 50 characters');
             return false;
         }
 
@@ -30,8 +25,13 @@ class ModuleIdentify extends Constraint
             return false;
         }
 
-        if (mb_strlen($moduleId) > 50) {
-            $this->error('Module ID must not exceed 50 characters');
+        if (!preg_match('/^[a-z0-9.]+$/', $moduleId)) {
+            $this->error('Module ID must contain only lowercase letters and numbers');
+            return false;
+        }
+
+        if (!preg_match('/^[^.]+\.[^.]+$/', $moduleId)) {
+            $this->error('Module ID must be in format <partner_name>.<module_name>');
             return false;
         }
 
