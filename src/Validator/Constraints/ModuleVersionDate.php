@@ -8,9 +8,10 @@ class ModuleVersionDate extends Constraint
 
     private string $message = 'Invalid version date format. Date must follow the pattern \'Y-m-d H:i:s\'.';
 
-    public function validate($value): bool
+    public function validate(mixed $value): bool
     {
-        if (\DateTime::createFromFormat(self::VERSION_DATE_FORMAT, $value)) {
+        $date = \DateTime::createFromFormat(self::VERSION_DATE_FORMAT, (string) $value);
+        if ($date && $date->format(self::VERSION_DATE_FORMAT) === $value) {
             $this->error = null;
             return true;
         }

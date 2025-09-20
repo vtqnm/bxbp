@@ -6,16 +6,36 @@ namespace Vtqnm\BxbpCli\Validator\Constraints;
 
 class ModuleIdentify extends Constraint
 {
-    private string $message = 'Invalid module ID format. It must follow the pattern \'vendor.module\' and contain only alphanumeric characters.';
-
-    public function validate($value): bool
+    public function validate(mixed $value): bool
     {
-        if (preg_match('/^[a-z_]+\.[a-z_]+$/', (string) $value)) {
-            $this->error = null;
-            return true;
+        $moduleId = (string) $value;
+
+        if (empty(trim($moduleId))) {
+            $this->error('Module ID is required');
+            return false;
         }
 
-        $this->error($this->message);
-        return false;
+        if (!preg_match('/^[^.]+\.[^.]+$/', $moduleId)) {
+            $this->error('Module ID must be in format <partner_name>.<module_name>');
+            return false;
+        }
+
+        if (!preg_match('/^[a-z0-9.]+$/', $moduleId)) {
+            $this->error('Module ID must contain only lowercase letters and numbers');
+            return false;
+        }
+
+        if (preg_match('/^\d/', $moduleId)) {
+            $this->error('Module ID must not start with a digit');
+            return false;
+        }
+
+        if (mb_strlen($moduleId) > 50) {
+            $this->error('Module ID must not exceed 50 characters');
+            return false;
+        }
+
+        $this->error = null;
+        return true;
     }
 }

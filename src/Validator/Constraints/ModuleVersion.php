@@ -6,7 +6,7 @@ class ModuleVersion extends Constraint
 {
     private string $message = 'Invalid version format. Version must follow the pattern \'X.Y.Z\' where X, Y, and Z are numeric values.';
 
-    public function validate($value): bool
+    public function validate(mixed $value): bool
     {
         if (preg_match('/^\d+\.\d+\.\d+$/', (string) $value)) {
             $this->error = null;

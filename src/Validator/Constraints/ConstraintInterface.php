@@ -6,7 +6,7 @@ namespace Vtqnm\BxbpCli\Validator\Constraints;
 
 interface ConstraintInterface
 {
-    public function validate($value): bool;
+    public function validate(mixed $value): bool;
 
     public function getError(): ?string;
 }
