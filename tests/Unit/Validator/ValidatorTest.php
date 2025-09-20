@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Validator\Validator;
-use Vtqnm\BxbpCli\Validator\Constraints\Constraint;
+use Vtqnm\Bxbp\Validator\Validator;
+use Vtqnm\Bxbp\Validator\Constraints\Constraint;
 
 beforeEach(function () {
     $this->validator = new Validator();

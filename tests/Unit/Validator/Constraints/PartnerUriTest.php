@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Vtqnm\BxbpCli\Validator\Constraints\PartnerUri;
+use Vtqnm\Bxbp\Validator\Constraints\PartnerUri;
 
 beforeEach(function () {
     $this->constraint = new PartnerUri();

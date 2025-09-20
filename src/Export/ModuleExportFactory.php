@@ -1,9 +1,9 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Export;
+namespace Vtqnm\Bxbp\Export;
 
-use Vtqnm\BxbpCli\Exceptions\InvalidModuleExportException;
-use Vtqnm\BxbpCli\Export\Strategy\RawModuleExport;
+use Vtqnm\Bxbp\Exceptions\InvalidModuleExportException;
+use Vtqnm\Bxbp\Export\Strategy\RawModuleExport;
 
 class ModuleExportFactory
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Export;
+namespace Vtqnm\Bxbp\Export;
 
-use Vtqnm\BxbpCli\Filesystem\Directory;
+use Vtqnm\Bxbp\Filesystem\Directory;
 
 class ModuleExporter
 {

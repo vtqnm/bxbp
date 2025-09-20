@@ -1,6 +1,6 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Exceptions;
+namespace Vtqnm\Bxbp\Exceptions;
 
 use InvalidArgumentException;
 

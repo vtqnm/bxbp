@@ -1,13 +1,13 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Generator;
+namespace Vtqnm\Bxbp\Generator;
 
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Vtqnm\BxbpCli\Config\ModuleConfig;
-use Vtqnm\BxbpCli\Filesystem\Directory;
-use Vtqnm\BxbpCli\Filesystem\TempDirectoryFactory;
+use Vtqnm\Bxbp\Config\ModuleConfig;
+use Vtqnm\Bxbp\Filesystem\Directory;
+use Vtqnm\Bxbp\Filesystem\TempDirectoryFactory;
 
 class ModuleGenerator
 {

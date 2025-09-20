@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Vtqnm\BxbpCli\Config;
+namespace Vtqnm\Bxbp\Config;
 
-use Vtqnm\BxbpCli\Exceptions\ModuleValidationException;
+use Vtqnm\Bxbp\Exceptions\ModuleValidationException;
 
 class ModuleConfigValidator
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Vtqnm\BxbpCli\Validator;
+namespace Vtqnm\Bxbp\Validator;
 
-use Vtqnm\BxbpCli\Validator\Constraints\Constraint;
+use Vtqnm\Bxbp\Validator\Constraints\Constraint;
 
 class Validator
 {

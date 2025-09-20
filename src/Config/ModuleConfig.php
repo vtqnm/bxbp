@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vtqnm\BxbpCli\Config;
+namespace Vtqnm\Bxbp\Config;
 
 class ModuleConfig
 {

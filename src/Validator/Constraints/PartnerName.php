@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vtqnm\BxbpCli\Validator\Constraints;
+namespace Vtqnm\Bxbp\Validator\Constraints;
 
 class PartnerName extends Constraint
 {
