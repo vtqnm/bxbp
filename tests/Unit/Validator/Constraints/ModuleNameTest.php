@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 use Vtqnm\Bxbp\Validator\Constraints\ModuleName;
 
+/**
+ * @param-closure-this TestCase  $closure
+ */
 beforeEach(function () {
     $this->constraint = new ModuleName();
 });

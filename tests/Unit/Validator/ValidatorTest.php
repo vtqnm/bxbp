@@ -5,6 +5,8 @@ declare(strict_types=1);
 use Vtqnm\Bxbp\Validator\Validator;
 use Vtqnm\Bxbp\Validator\Constraints\Constraint;
 
+/** @var  */
+
 beforeEach(function () {
     $this->validator = new Validator();
 });

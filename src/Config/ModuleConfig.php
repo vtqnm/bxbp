@@ -66,6 +66,9 @@ class ModuleConfig
         return str_replace('.', '_', mb_strtoupper($this->moduleId));
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function toReplacementMap(): array
     {
         return [
