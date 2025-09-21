@@ -104,12 +104,12 @@ class NewCommand extends Command
 
     protected function writeLogo(OutputInterface $output): void
     {
-        $output->write(PHP_EOL . '  <fg=blue>
- ______     __  __     __    __     ______     ______  
-/\  == \   /\_\_\_\   /\ "-./  \   /\  == \   /\  == \ 
-\ \  __<   \/_/\_\/_  \ \ \-./\ \  \ \  __<   \ \  _-/ 
- \ \_____\   /\_\/\_\  \ \_\ \ \_\  \ \_____\  \ \_\   
-  \/_____/   \/_/\/_/   \/_/  \/_/   \/_____/   \/_/</>' . PHP_EOL . PHP_EOL);
+        $output->write(PHP_EOL . '<fg=blue>
+   ______     __  __     ______     ______  
+  /\  == \   /\_\_\_\   /\  == \   /\  == \ 
+  \ \  __<   \/_/\_\/_  \ \  __<   \ \  _-/ 
+   \ \_____\   /\_\/\_\  \ \_____\  \ \_\   
+    \/_____/   \/_/\/_/   \/_____/   \/_/</>' . PHP_EOL . PHP_EOL);
     }
 
     protected function confirmProceedWithoutModulesFolder(): bool

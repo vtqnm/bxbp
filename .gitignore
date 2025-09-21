@@ -1,3 +1,4 @@
-.idea
-vendor
-composer.phar
+.idea/
+.vscode/
+/vendor/
+composer.lock
