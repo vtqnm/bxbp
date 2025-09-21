@@ -13,11 +13,18 @@ class ModuleGenerator
 {
     protected string $templatePath;
     protected string $languageCode;
+    /** @var array<string, string> */
     protected array $replacements;
 
     protected Filesystem $filesystem;
     protected TempDirectoryFactory $tempDirectoryFactory;
 
+    /**
+     * @param string $templatePath
+     * @param string $languageCode
+     * @param array<string, string>|ModuleConfig $replacements
+     * @throws \InvalidArgumentException
+     */
     public function __construct(
         string $templatePath,
         string $languageCode,
@@ -80,12 +87,17 @@ class ModuleGenerator
                 continue;
             }
 
+            $content = file_get_contents($file->getPathname());
+            if ($content === false) {
+                throw new \RuntimeException('Failed to read file: ' . $file->getPathname());
+            }
+            
             file_put_contents(
                 $file->getPathname(),
                 str_replace(
                     array_keys($escapedReplacements),
                     array_values($escapedReplacements),
-                    file_get_contents($file->getPathname())
+                    $content
                 )
             );
         }
@@ -130,6 +142,9 @@ class ModuleGenerator
         throw new RuntimeException('No language directories found in: ' . $langPath);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getEscapedReplacements(): array
     {
         return array_map(function ($value) {

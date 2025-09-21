@@ -50,7 +50,7 @@ class NewCommand extends Command
 
         $this->writeLogo($output);
 
-        $isModulesFolder = str_ends_with(getcwd(), '/modules');
+        $isModulesFolder = str_ends_with(getcwd() ?: '', '/modules');
         if (!$isModulesFolder && !$this->confirmProceedWithoutModulesFolder()) {
             error('"Module creation process has been canceled.');
             exit(1);
@@ -278,6 +278,9 @@ class NewCommand extends Command
         ));
     }
 
+    /**
+     * @param array<string> $errors
+     */
     private function formatValidationErrors(array $errors): string
     {
         return implode(PHP_EOL, $errors);

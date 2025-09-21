@@ -13,7 +13,7 @@ class ModuleExporter
         $this->exportStrategy = $exportStrategy;
     }
 
-    public function export(Directory $source, string $destination)
+    public function export(Directory $source, string $destination): void
     {
         $this->exportStrategy->export($source, $destination);
     }

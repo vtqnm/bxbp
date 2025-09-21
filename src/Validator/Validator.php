@@ -6,6 +6,7 @@ use Vtqnm\Bxbp\Validator\Constraints\Constraint;
 
 class Validator
 {
+    /** @var array<string> */
     protected array $errors = [];
 
     /**
@@ -36,6 +37,9 @@ class Validator
         return $this;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getErrors(): array
     {
         return $this->errors;

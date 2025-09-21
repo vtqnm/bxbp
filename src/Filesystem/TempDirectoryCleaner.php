@@ -6,7 +6,8 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class TempDirectoryCleaner
 {
-    private static array $dirs = [];
+    /** @var array<string> */
+    protected static array $dirs = [];
 
     public static function register(string $path): void
     {
