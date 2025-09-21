@@ -1,0 +1,20 @@
+<?php
+
+namespace Vtqnm\Bxbp\Export;
+
+use Vtqnm\Bxbp\Exceptions\InvalidModuleExportException;
+use Vtqnm\Bxbp\Export\Strategy\RawModuleExport;
+
+class ModuleExportFactory
+{
+    public static function create(string $type): ModuleExportStrategy
+    {
+        return match ($type) {
+            // TODO zip and tar in future   
+            // 'tar' => new TarModuleExport(),
+            // 'zip' => new ZipModuleExport(),
+            'raw' => new RawModuleExport(),
+            default => throw new InvalidModuleExportException("Unknown export type: {$type}")
+        };
+    }
+}

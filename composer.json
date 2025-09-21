@@ -1,0 +1,48 @@
+{
+  "name": "vtqnm/bxbp",
+  "description": "Tools for Bitrix module boilerplate",
+  "keywords": [
+    "cli",
+    "bitrix",
+    "module",
+    "boilerplate",
+    "tool"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "vtqnm",
+      "email": "vtqnm0@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Vtqnm\\Bxbp\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Vtqnm\\Bxbp\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^8.1.0",
+    "symfony/filesystem": "^6.4",
+    "symfony/polyfill-mbstring": "^1.33",
+    "laravel/prompts": "^0.3.4"
+  },
+  "require-dev": {
+    "pestphp/pest": "^2.3|^3.4",
+    "phpstan/phpstan": "^2.1"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "bin": [
+    "bin/bxbp"
+  ],
+  "config": {
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
+  }
+}
