@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Vtqnm\Bxbp\Command;
+namespace Vtqnm\Bxbp\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -80,7 +80,7 @@ class NewCommand extends Command
             );
 
             $generator = ModuleGenerator::fromConfig(
-                dirname(__DIR__, 2) . '/stubs/module',
+                dirname(__DIR__, 3) . '/stubs/module',
                 $moduleConfig
             );
 

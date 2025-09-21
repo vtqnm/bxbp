@@ -3,10 +3,11 @@
 
 declare(strict_types=1);
 
+use Vtqnm\Bxbp\Console\Application;
+
 $root = dirname(__DIR__);
 
 require $root . '/vendor/autoload.php';
 
-$application = new \Symfony\Component\Console\Application('BXBP CLI', '0.0.1');
-$application->add(new \Vtqnm\Bxbp\Command\NewCommand());
+$application = new Application();
 $application->run();
