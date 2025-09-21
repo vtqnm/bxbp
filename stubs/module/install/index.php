@@ -30,23 +30,25 @@ class {CLASS_NAME} extends CModule {
         $this->PARTNER_URI = Loc::getMessage('{LANG_MODULE_PREFIX}_PARTNER_URI');
     }
 
-    function DoInstall()
+    public function DoInstall()
     {
+        ModuleManager::registerModule('{MODULE_ID}');
+
         $this->InstallDB();
     }
 
-    function DoUninstall()
+    public function DoUninstall()
     {
         $this->UnInstallDB();
+
+        ModuleManager::unRegisterModule('{MODULE_ID}');
     }
 
     public function InstallDB()
     {
-        ModuleManager::registerModule('{MODULE_ID}');
     }
 
     public function UnInstallDB()
     {
-        ModuleManager::unRegisterModule('{MODULE_ID}');
     }
 }

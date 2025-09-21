@@ -67,6 +67,8 @@ class ModuleGenerator
 
     private function replacePlaceholders(string $workPath): void
     {
+        $escapedReplacements = $this->getEscapedReplacements();
+
         $files = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($workPath),
             \RecursiveIteratorIterator::LEAVES_ONLY
@@ -81,8 +83,8 @@ class ModuleGenerator
             file_put_contents(
                 $file->getPathname(),
                 str_replace(
-                    array_keys($this->replacements),
-                    array_values($this->replacements),
+                    array_keys($escapedReplacements),
+                    array_values($escapedReplacements),
                     file_get_contents($file->getPathname())
                 )
             );
@@ -126,5 +128,12 @@ class ModuleGenerator
         }
 
         throw new RuntimeException('No language directories found in: ' . $langPath);
+    }
+
+    private function getEscapedReplacements(): array
+    {
+        return array_map(function ($value) {
+            return addslashes(strip_tags($value));
+        }, $this->replacements);
     }
 }
