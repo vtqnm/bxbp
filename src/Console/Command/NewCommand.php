@@ -7,6 +7,7 @@ namespace Vtqnm\Bxbp\Console\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Vtqnm\Bxbp\Validator\Validation;
 use Vtqnm\Bxbp\Validator\Validator;
@@ -35,13 +36,14 @@ class NewCommand extends Command
         $this
             ->setName('new')
             ->setDescription('Create a new Bitrix module')
-            ->addArgument('id', InputArgument::REQUIRED, 'Module id')
-            ->addArgument('name', InputArgument::OPTIONAL, 'Module name')
-            ->addArgument('description', InputArgument::OPTIONAL, 'Module description')
-            ->addArgument('partner', InputArgument::OPTIONAL, 'Module partner')
-            ->addArgument('partner_url', InputArgument::OPTIONAL, 'Partner url')
-            ->addArgument('version', InputArgument::OPTIONAL, 'Version')
-            ->addArgument('version_date', InputArgument::OPTIONAL, 'Version date');
+            ->addArgument('id', InputArgument::REQUIRED, 'Module id (e.g., vendor.module)')
+
+            ->addOption('name', null, InputOption::VALUE_OPTIONAL, 'Module name')
+            ->addOption('description', null, InputOption::VALUE_OPTIONAL, 'Module description')
+            ->addOption('partner', null, InputOption::VALUE_OPTIONAL, 'Partner name')
+            ->addOption('partner-url', null, InputOption::VALUE_OPTIONAL, 'Partner website URL')
+            ->addOption('ver', null, InputOption::VALUE_OPTIONAL, 'Module version', '1.0.0')
+            ->addOption('ver-date', null, InputOption::VALUE_OPTIONAL, 'Version release date');
     }
 
     protected function interact(InputInterface $input, OutputInterface $output): void
@@ -70,12 +72,12 @@ class NewCommand extends Command
         try {
             $moduleConfig = new ModuleConfig(
                 $input->getArgument('id'),
-                $input->getArgument('name'),
-                $input->getArgument('description'),
-                $input->getArgument('partner'),
-                $input->getArgument('partner_url'),
-                $input->getArgument('version'),
-                $input->getArgument('version_date'),
+                $input->getOption('name'),
+                $input->getOption('description'),
+                $input->getOption('partner'),
+                $input->getOption('partner-url'),
+                $input->getOption('ver'),
+                $input->getOption('ver-date'),
                 'ru'
             );
 
@@ -163,7 +165,7 @@ class NewCommand extends Command
     {
         $constraint = new Constraints\ModuleName();
 
-        $moduleName = $input->getArgument('name');
+        $moduleName = $input->getOption('name');
         if (!empty($moduleName) && $this->validator->validate($moduleName, $constraint)) {
             return;
         }
@@ -172,7 +174,7 @@ class NewCommand extends Command
             info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        $input->setArgument('name', text(
+        $input->setOption('name', text(
             'Enter the module name',
             'Module name <fg=blue>(optional)</>',
             validate: fn($value) => $this->validator->validate($value, $constraint)
@@ -185,7 +187,7 @@ class NewCommand extends Command
     {
         $constraint = new Constraints\ModuleDescription();
 
-        $moduleDescription = $input->getArgument('description');
+        $moduleDescription = $input->getOption('description');
         if (!empty($moduleDescription) && $this->validator->validate($moduleDescription, $constraint)) {
             return;
         }
@@ -194,7 +196,7 @@ class NewCommand extends Command
             info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        $input->setArgument('description', text(
+        $input->setOption('description', text(
             'Enter the module description',
             'Module description <fg=blue>(optional)</>',
             validate: fn($value) => $this->validator->validate($value, $constraint)
@@ -207,7 +209,7 @@ class NewCommand extends Command
     {
         $constraint = new Constraints\PartnerName();
 
-        $partnerName = $input->getArgument('partner');
+        $partnerName = $input->getOption('partner');
         if (!empty($partnerName) && $this->validator->validate($partnerName, $constraint)) {
             return;
         }
@@ -216,7 +218,7 @@ class NewCommand extends Command
             info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        $input->setArgument('partner', text(
+        $input->setOption('partner', text(
             'Enter the partner name',
             'Partner name <fg=blue>(optional)</>',
             validate: fn($value) => $this->validator->validate($value, $constraint)
@@ -229,7 +231,7 @@ class NewCommand extends Command
     {
         $constraint = new Constraints\PartnerUri();
 
-        $partnerUrl = $input->getArgument('partner_url');
+        $partnerUrl = $input->getOption('partner-url');
         if (!empty($partnerUrl) && $this->validator->validate($partnerUrl, $constraint)) {
             return;
         }
@@ -238,7 +240,7 @@ class NewCommand extends Command
             info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        $input->setArgument('partner_url', text(
+        $input->setOption('partner-url', text(
             'Enter the partner url',
             'https://example.com <fg=blue>(optional)</>',
             validate: fn($value) => $this->validator->validate($value, $constraint)
@@ -251,7 +253,7 @@ class NewCommand extends Command
     {
         $constraint = new Constraints\ModuleVersion();
 
-        $version = $input->getArgument('version');
+        $version = $input->getOption('ver');
         if (!empty($version) && $this->validator->validate($version, $constraint)) {
             return;
         }
@@ -260,7 +262,7 @@ class NewCommand extends Command
             info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
         }
 
-        $input->setArgument('version', text(
+        $input->setOption('ver', text(
             'Enter the version',
             '1.0.0',
             '1.0.0',
@@ -274,7 +276,7 @@ class NewCommand extends Command
     {
         $constraint = new Constraints\ModuleVersionDate();
 
-        $versionDate = $input->getArgument('version_date');
+        $versionDate = $input->getOption('ver-date');
         if (!empty($versionDate) && $this->validator->validate($versionDate, $constraint)) {
             return;
         }
@@ -286,7 +288,7 @@ class NewCommand extends Command
         $now = time();
         $dateFormat = 'Y-m-d H:i:s';
 
-        $input->setArgument('version_date', text(
+        $input->setOption('ver-date', text(
             'Enter the version date',
             date($dateFormat, $now),
             date($dateFormat, $now),
