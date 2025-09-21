@@ -56,7 +56,7 @@ class NewCommand extends Command
             exit(1);
         }
 
-        $this->askModuleIdIfNotFilled($input);
+        $this->askModuleIdIfNotValid($input);
         $this->askModuleNameIfNotFilled($input);
         $this->askModuleDescriptionIfNotFilled($input);
         $this->askPartnerNameIfNotFilled($input);
@@ -117,28 +117,46 @@ class NewCommand extends Command
         return confirm('You are not in the modules directory. Continue?');
     }
 
-    protected function askModuleIdIfNotFilled(InputInterface $input): void
+    protected function askModuleIdIfNotValid(InputInterface $input): void
     {
-        $constraint = new Constraints\ModuleIdentify();
-
         $moduleId = $input->getArgument('id');
 
-        if (!empty($moduleId) && $this->validator->validate($moduleId, $constraint)) {
-            return;
-        }
-
         if (!empty($moduleId)) {
-            info('<fg=yellow>' . $this->formatValidationErrors($this->validator->getErrors()) . '</>');
+            $errors = $this->getModuleIdValidationErrors($moduleId);
+            if (empty($errors)) {
+                return;
+            }
+            info('<fg=yellow>' . $this->formatValidationErrors($errors) . '</>');
         }
 
         $input->setArgument('id', text(
             'Enter the module ID',
             'vendor.module',
             required: true,
-            validate: fn($value) => $this->validator->validate($value, $constraint)
-                ? null
-                : $this->formatValidationErrors($this->validator->getErrors())
+            validate: function ($value) {
+                $errors = $this->getModuleIdValidationErrors($value);
+                return empty($errors) ? null : $this->formatValidationErrors($errors);
+            }
         ));
+    }
+
+    /**
+     * @return array<string>
+     */
+    private function getModuleIdValidationErrors(string $moduleId): array
+    {
+        $constraint = new Constraints\ModuleIdentify();
+        $errors = [];
+
+        if (!$this->validator->validate($moduleId, $constraint)) {
+            $errors = array_merge($errors, $this->validator->getErrors());
+        }
+
+        if ($this->moduleExistsInCurrentDirectory($moduleId)) {
+            $errors[] = "Module with ID '{$moduleId}' already exists in current directory";
+        }
+
+        return $errors;
     }
 
     protected function askModuleNameIfNotFilled(InputInterface $input): void
@@ -276,6 +294,16 @@ class NewCommand extends Command
                 ? null
                 : $this->formatValidationErrors($this->validator->getErrors())
         ));
+    }
+
+    protected function moduleExistsInCurrentDirectory(string $moduleId): bool
+    {
+        $currentDir = getcwd();
+        if ($currentDir === false) {
+            return false;
+        }
+
+        return is_dir($currentDir . DIRECTORY_SEPARATOR . $moduleId);
     }
 
     /**
