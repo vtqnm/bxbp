@@ -1,6 +1,6 @@
 {
-  "name": "vtqnm/bxbp-cli",
-  "description": "CLI tool for Bitrix module boilerplate",
+  "name": "vtqnm/bxbp",
+  "description": "Tools for Bitrix module boilerplate",
   "minimum-stability": "stable",
   "license": "MIT",
   "authors": [
@@ -18,7 +18,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Vtqnm\\BxbpCli\\": "src/"
+      "Vtqnm\\Bxbp\\": "src/"
     }
   },
   "require-dev": {
@@ -26,7 +26,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Vtqnm\\BxbpCli\\Tests\\": "tests/"
+      "Vtqnm\\Bxbp\\Tests\\": "tests/"
     }
   },
   "bin": [
