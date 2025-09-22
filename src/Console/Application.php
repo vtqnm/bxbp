@@ -10,7 +10,7 @@ use Vtqnm\Bxbp\Console\Command\NewCommand;
 class Application extends BaseApplication
 {
     public const NAME = 'BXBP';
-    public const VERSION = '1.0.0';
+    public const VERSION = '1.0.1';
 
     public function __construct()
     {

@@ -3,11 +3,11 @@
 
 declare(strict_types=1);
 
-use Vtqnm\Bxbp\Console\Application;
+if (file_exists(dirname(__DIR__) . '/vendor/autoload.php')) {
+    require_once dirname(__DIR__) . '/vendor/autoload.php';
+} else {
+    require_once dirname(__DIR__, 3) . '/autoload.php';
+}
 
-$root = dirname(__DIR__);
-
-require $root . '/vendor/autoload.php';
-
-$application = new Application();
+$application = new Vtqnm\Bxbp\Console\Application();
 $application->run();
