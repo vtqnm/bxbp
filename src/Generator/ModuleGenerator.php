@@ -4,7 +4,6 @@ namespace Vtqnm\Bxbp\Generator;
 
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Vtqnm\Bxbp\Config\ModuleConfig;
 use Vtqnm\Bxbp\Filesystem\Directory;
 use Vtqnm\Bxbp\Filesystem\TempDirectoryFactory;
@@ -89,9 +88,9 @@ class ModuleGenerator
 
             $content = file_get_contents($file->getPathname());
             if ($content === false) {
-                throw new \RuntimeException('Failed to read file: ' . $file->getPathname());
+                throw new RuntimeException('Failed to read file: ' . $file->getPathname());
             }
-            
+
             file_put_contents(
                 $file->getPathname(),
                 str_replace(
@@ -123,23 +122,21 @@ class ModuleGenerator
     private function getTemplateLangFolderCode(string $workPath): string
     {
         $langPath = $workPath . '/install/lang/';
-        
+
         if (!$this->filesystem->exists($langPath)) {
             throw new RuntimeException('Language directory does not exist: ' . $langPath);
         }
 
-        $finder = new Finder();
-        $directories = $finder->directories()->in($langPath)->depth(0);
+        $directories = array_filter(
+            scandir($langPath),
+            fn($item) => $item !== '.' && $item !== '..' && is_dir($langPath . '/' . $item)
+        );
 
-        if ($directories->count() === 0) {
+        if (empty($directories)) {
             throw new RuntimeException('No language directories found in: ' . $langPath);
         }
 
-        foreach ($directories as $directory) {
-            return $directory->getFilename();
-        }
-
-        throw new RuntimeException('No language directories found in: ' . $langPath);
+        return reset($directories);
     }
 
     /**
